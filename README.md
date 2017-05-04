@@ -81,7 +81,6 @@ func main() {
     // update Content item of type Blog and ID 9 with data
     data = make(url.Values)
     data.Set("title", "Added then updated via API")
-    data.Set("body", "<p>i'm not sure about this.</p>")
     data.Set("author", "API Steve")
 
     resp, err = cms.Update("Blog", 9, data)
