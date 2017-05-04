@@ -1,5 +1,9 @@
 # Ponzu HTTP Client - Go
 
+## Work in Progress
+- currently no way to add headers or anything to the client request
+- API in flux, alpha software
+
 ### Usage
 ```go
 package main
