@@ -2,7 +2,6 @@
 
 ## Work in Progress
 - Currently no way to add headers or anything to the client request
-- Needs a way to add Files to the multipartForm func
 - API in flux, alpha software
 
 ### Usage
