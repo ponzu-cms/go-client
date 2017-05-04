@@ -1,7 +1,8 @@
 # Ponzu HTTP Client - Go
 
 ## Work in Progress
-- currently no way to add headers or anything to the client request
+- Currently no way to add headers or anything to the client request
+- Needs a way to add Files to the multipartForm func
 - API in flux, alpha software
 
 ### Usage
@@ -57,9 +58,9 @@ func main() {
     fmt.Println(resp.Data[1]["title"])
 
     // fetch file metadata for uploaded file with slug "mudcracks-mars.jpg" (slug is normalized filename)
-    resp, err = cms.UploadBySlug("mudcracks-mars.jpg")
+    resp, err = cms.FileBySlug("mudcracks-mars.jpg")
     if err != nil {
-        fmt.Println("Uploads:slug error:", err)
+        fmt.Println("File:slug error:", err)
         return
     }
 

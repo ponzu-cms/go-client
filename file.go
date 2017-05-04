@@ -2,9 +2,9 @@ package client
 
 import "fmt"
 
-// UploadBySlug makes a GET request to return the Ponzu File Metadata API
+// FileBySlug makes a GET request to return the Ponzu File Metadata API
 // response for the enpoint: `/api/uploads?slug=<Slug>`
-func (c *Client) UploadBySlug(slug string) (*APIResponse, error) {
+func (c *Client) FileBySlug(slug string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/uploads?slug=%s",
 		c.Conf.Host, slug,

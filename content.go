@@ -85,8 +85,6 @@ func (c *Client) Contents(contentType string, opts QueryOptions) (*APIResponse, 
 	return resp, err
 }
 
-// TODO: add Create(), Update(), Delete() content client methods
-
 func (c *Client) Create(contentType string, data interface{}) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/create?type=%s",
