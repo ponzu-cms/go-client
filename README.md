@@ -108,3 +108,7 @@ func main() {
 }
 
 ```
+
+Alternatively, the `resp` return value (which is an `*APIResponse` type) contains the response body's original
+`[]byte` as `resp.JSON`, which you can use to unmarshal to content structs from
+your Ponzu's `content` package.
