@@ -64,8 +64,6 @@ func (c *Cache) Add(endpoint string, resp *APIResponse) error {
 		response:   resp,
 	}
 
-	fmt.Println(fmt.Sprintf("%#v", c.Data))
-
 	return nil
 }
 
