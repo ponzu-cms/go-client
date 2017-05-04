@@ -85,7 +85,7 @@ func (c *Client) Contents(contentType string, opts QueryOptions) (*APIResponse, 
 	return resp, err
 }
 
-func (c *Client) Create(contentType string, data interface{}) (*APIResponse, error) {
+func (c *Client) Create(contentType string, data interface{}, fileKeys []string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/create?type=%s",
 		c.Conf.Host, contentType,
@@ -99,7 +99,7 @@ func (c *Client) Create(contentType string, data interface{}) (*APIResponse, err
 	params := make(url.Values)
 	err = json.Unmarshal(j, &params)
 
-	req, err := multipartForm(endpoint, params)
+	req, err := multipartForm(endpoint, params, fileKeys)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +121,7 @@ func (c *Client) Create(contentType string, data interface{}) (*APIResponse, err
 	return resp, nil
 }
 
-func (c *Client) Update(contentType string, id int, data interface{}) (*APIResponse, error) {
+func (c *Client) Update(contentType string, id int, data interface{}, fileKeys []string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/update?type=%s&id=%d",
 		c.Conf.Host, contentType, id,
@@ -135,7 +135,7 @@ func (c *Client) Update(contentType string, id int, data interface{}) (*APIRespo
 	params := make(url.Values)
 	err = json.Unmarshal(j, &params)
 
-	req, err := multipartForm(endpoint, params)
+	req, err := multipartForm(endpoint, params, fileKeys)
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +163,7 @@ func (c *Client) Delete(contentType string, id int) (*APIResponse, error) {
 		c.Conf.Host, contentType, id,
 	)
 
-	req, err := multipartForm(endpoint, nil)
+	req, err := multipartForm(endpoint, nil, nil)
 	if err != nil {
 		return nil, err
 	}
