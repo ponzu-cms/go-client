@@ -78,12 +78,12 @@ func main() {
     fmt.Println(resp.Data[0]["status"], resp.Data[0]["id"])
     id := int(resp.Data[0]["id"].(float64))
 
-    // update Content item of type Blog and ID 9 with data
+    // update Content item of type Blog and ID {id} with data
     data = make(url.Values)
     data.Set("title", "Added then updated via API")
     data.Set("author", "API Steve")
 
-    resp, err = cms.Update("Blog", 9, data)
+    resp, err = cms.Update("Blog", id, data)
     if err != nil {
         fmt.Println("Create:Blog error:", err)
         return
