@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 )
 
@@ -21,7 +22,14 @@ func (c *Client) Content(contentType string, id int) (*APIResponse, error) {
 		}
 	}
 
-	w, err := c.Get(endpoint)
+	req, err := http.NewRequest(http.MethodGet, endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req = mergeHeader(req, c.Conf.Header)
+
+	w, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +71,14 @@ func (c *Client) Contents(contentType string, opts QueryOptions) (*APIResponse, 
 		}
 	}
 
-	w, err := c.Get(endpoint)
+	req, err := http.NewRequest(http.MethodGet, endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req = mergeHeader(req, c.Conf.Header)
+
+	w, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -104,6 +119,8 @@ func (c *Client) Create(contentType string, data interface{}, fileKeys []string)
 		return nil, err
 	}
 
+	req = mergeHeader(req, c.Conf.Header)
+
 	w, err := c.Do(req)
 	if err != nil {
 		return nil, err
@@ -140,6 +157,8 @@ func (c *Client) Update(contentType string, id int, data interface{}, fileKeys [
 		return nil, err
 	}
 
+	req = mergeHeader(req, c.Conf.Header)
+
 	w, err := c.Do(req)
 	if err != nil {
 		return nil, err
@@ -172,6 +191,8 @@ func (c *Client) Delete(contentType string, id int) (*APIResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	req = mergeHeader(req, c.Conf.Header)
 
 	resp := &APIResponse{
 		Response: w,

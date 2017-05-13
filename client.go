@@ -18,6 +18,7 @@ type Client struct {
 type Config struct {
 	Host         string `json:"host"`
 	DisableCache bool   `json:"disable_cache"`
+	Header       http.Header
 }
 
 type APIResponse struct {
@@ -77,4 +78,14 @@ func setDefaultOpts(opts QueryOptions) QueryOptions {
 	}
 
 	return opts
+}
+
+func mergeHeader(req *http.Request, header http.Header) *http.Request {
+	for k, v := range header {
+		for i := range v {
+			req.Header.Add(k, v[i])
+		}
+	}
+
+	return req
 }

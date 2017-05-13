@@ -1,8 +1,6 @@
 # Ponzu HTTP Client - Go
 
 ## Work in Progress
-- Currently no way to add headers or anything to the client request
-- API in flux, alpha software
 
 ### Usage
 ```go
@@ -21,7 +19,12 @@ func main() {
         Host:         "http://localhost:8080",
         DisableCache: false, // defaults to false, here for documentation
     }
-    cms := client.New(cfg)
+
+    // add custom header(s) if needed:
+    cfg.Header.Set("Authorization", "Bearer $ACCESS_TOKEN")
+    cfg.Header.Set("X-Client", "MyGoApp v0.9")
+
+    ponzu := client.New(cfg)
 
 
     //------------------------------------------------------------------
@@ -29,7 +32,7 @@ func main() {
     //------------------------------------------------------------------
 
     // fetch single Content item of type Blog by ID 1
-    resp, err := cms.Content("Blog", 1)
+    resp, err := ponzu.Content("Blog", 1)
     if err != nil {
         fmt.Println("Blog:1 error:", err)
         return
@@ -48,7 +51,7 @@ func main() {
     // Count: 10
     // Offset: 0
     // Order: DESC
-    resp, err = cms.Contents("Blog", client.QueryOptions{})
+    resp, err = ponzu.Contents("Blog", client.QueryOptions{})
     if err != nil {
         fmt.Println("Blog:multi error:", err)
         return
@@ -65,7 +68,7 @@ func main() {
     //------------------------------------------------------------------
 
     // fetch the search results for a query "Steve" from Content items of type Blog
-    resp, err = cms.Search("Blog", "Steve")
+    resp, err = ponzu.Search("Blog", "Steve")
     if err != nil {
         fmt.Println("Blog:search error:", err)
         return
@@ -81,7 +84,7 @@ func main() {
     //------------------------------------------------------------------
 
     // fetch file metadata for uploaded file with slug "mudcracks-mars.jpg" (slug is normalized filename)
-    resp, err = cms.FileBySlug("mudcracks-mars.jpg")
+    resp, err = ponzu.FileBySlug("mudcracks-mars.jpg")
     if err != nil {
         fmt.Println("File:slug error:", err)
         return
@@ -105,7 +108,7 @@ func main() {
 
     // nil indicates no data params are filepaths, 
     // otherwise would be a []string of key names that are filepaths (docs coming)
-    resp, err = cms.Create("Blog", data, nil)
+    resp, err = ponzu.Create("Blog", data, nil)
     if err != nil {
         fmt.Println("Create:Blog error:", err)
         return
@@ -125,13 +128,13 @@ func main() {
     data.Set("title", "Added then updated via API")
     data.Set("author", "API Steve")
 
-    resp, err = cms.Update("Blog", id, data, nil)
+    resp, err = ponzu.Update("Blog", id, data, nil)
     if err != nil {
         fmt.Println("Create:Blog error:", err)
         return
     }
 
-    resp, err = cms.Search("Blog", `"API Steve"`)
+    resp, err = ponzu.Search("Blog", `"API Steve"`)
     if err != nil {
         fmt.Println("Blog:search error:", err)
         return
@@ -146,7 +149,7 @@ func main() {
     //------------------------------------------------------------------
 
     // delete Content item of type Blog with ID {id}
-    resp, err = cms.Delete("Blog", id)
+    resp, err = ponzu.Delete("Blog", id)
     if err != nil {
         fmt.Println("Delete:Blog:#id error:", err, id)
         return
