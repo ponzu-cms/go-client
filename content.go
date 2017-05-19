@@ -52,7 +52,7 @@ func (c *Client) Content(contentType string, id int) (*APIResponse, error) {
 }
 
 // ContentBySlug makes a GET request to return the Ponzu Content API response for the
-// enpoint: `/api/content?type=<Type>&id=<ID>`
+// enpoint: `/api/content?slug=<Slug>`
 func (c *Client) ContentBySlug(slug string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content?slug=%s",
