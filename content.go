@@ -51,6 +51,50 @@ func (c *Client) Content(contentType string, id int) (*APIResponse, error) {
 	return resp, err
 }
 
+// ContentBySlug makes a GET request to return the Ponzu Content API response for the
+// enpoint: `/api/content?type=<Type>&id=<ID>`
+func (c *Client) ContentBySlug(slug string) (*APIResponse, error) {
+	endpoint := fmt.Sprintf(
+		"%s/api/content?slug=%s",
+		c.Conf.Host, slug,
+	)
+
+	if c.CacheEnabled() {
+		ok, resp := c.Cache.Check(endpoint)
+		if ok {
+			return resp, nil
+		}
+	}
+
+	req, err := http.NewRequest(http.MethodGet, endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req = mergeHeader(req, c.Conf.Header)
+
+	w, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &APIResponse{
+		Response: w,
+	}
+
+	err = resp.Process()
+	if err != nil {
+		return resp, err
+	}
+
+	if c.CacheEnabled() {
+		err := c.Cache.Add(endpoint, resp)
+		return resp, err
+	}
+
+	return resp, err
+}
+
 // Contents makes a GET request to return the Ponzu Content API response for the
 // enpoint: `/api/contents?type=<Type>` with query options:
 // Count <int>
