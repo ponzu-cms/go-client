@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/ponzu-cms/ponzu/system/addon"
 )
 
 type Client struct {
@@ -28,7 +26,12 @@ type APIResponse struct {
 	Data []map[string]interface{}
 }
 
-type QueryOptions addon.QueryOptions
+// QueryOptions holds options for a query
+type QueryOptions struct {
+	Count  int
+	Offset int
+	Order  string
+}
 
 func (a *APIResponse) Process() error {
 	jsn, err := ioutil.ReadAll(a.Response.Body)
