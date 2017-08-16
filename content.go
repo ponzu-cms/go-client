@@ -48,7 +48,7 @@ func (c *Client) Content(contentType string, id int) (*APIResponse, error) {
 		return resp, err
 	}
 
-	return resp, err
+	return resp, nil
 }
 
 // ContentBySlug makes a GET request to return the Ponzu Content API response for the
@@ -92,7 +92,7 @@ func (c *Client) ContentBySlug(slug string) (*APIResponse, error) {
 		return resp, err
 	}
 
-	return resp, err
+	return resp, nil
 }
 
 // Contents makes a GET request to return the Ponzu Content API response for the
@@ -141,7 +141,7 @@ func (c *Client) Contents(contentType string, opts QueryOptions) (*APIResponse, 
 		return resp, err
 	}
 
-	return resp, err
+	return resp, nil
 }
 
 func (c *Client) Create(contentType string, data interface{}, fileKeys []string) (*APIResponse, error) {
