@@ -38,7 +38,7 @@ func (c *Client) Content(contentType string, id int) (*APIResponse, error) {
 		Response: w,
 	}
 
-	err = resp.Process()
+	err = resp.process()
 	if err != nil {
 		return resp, err
 	}
@@ -82,7 +82,7 @@ func (c *Client) ContentBySlug(slug string) (*APIResponse, error) {
 		Response: w,
 	}
 
-	err = resp.Process()
+	err = resp.process()
 	if err != nil {
 		return resp, err
 	}
@@ -131,7 +131,7 @@ func (c *Client) Contents(contentType string, opts QueryOptions) (*APIResponse, 
 		Response: w,
 	}
 
-	err = resp.Process()
+	err = resp.process()
 	if err != nil {
 		return resp, err
 	}
@@ -174,7 +174,7 @@ func (c *Client) Create(contentType string, data interface{}, fileKeys []string)
 		Response: w,
 	}
 
-	err = resp.Process()
+	err = resp.process()
 	if err != nil {
 		return nil, err
 	}
@@ -212,7 +212,7 @@ func (c *Client) Update(contentType string, id int, data interface{}, fileKeys [
 		Response: w,
 	}
 
-	err = resp.Process()
+	err = resp.process()
 	if err != nil {
 		return nil, err
 	}
@@ -242,7 +242,7 @@ func (c *Client) Delete(contentType string, id int) (*APIResponse, error) {
 		Response: w,
 	}
 
-	err = resp.Process()
+	err = resp.process()
 	if err != nil {
 		return nil, err
 	}

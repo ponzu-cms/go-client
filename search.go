@@ -29,7 +29,7 @@ func (c *Client) Search(contentType string, q string) (*APIResponse, error) {
 		Response: w,
 	}
 
-	err = resp.Process()
+	err = resp.process()
 	if err != nil {
 		return resp, err
 	}

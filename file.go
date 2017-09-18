@@ -26,7 +26,7 @@ func (c *Client) FileBySlug(slug string) (*APIResponse, error) {
 		Response: w,
 	}
 
-	err = resp.Process()
+	err = resp.process()
 	if err != nil {
 		return resp, err
 	}

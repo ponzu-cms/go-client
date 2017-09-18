@@ -12,7 +12,12 @@ import (
 	"strings"
 )
 
-// Creates a new multipart/form-data http request with form data
+// MultipartFormRequest creates a new multipart/form-data http request with form data
+// (exported for testing, clients typically will not need this)
+func MultipartFormRequest(endpoint string, params url.Values, fileParams []string) (*http.Request, error) {
+	return multipartForm(endpoint, params, fileParams)
+}
+
 func multipartForm(endpoint string, params url.Values, fileParams []string) (*http.Request, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)

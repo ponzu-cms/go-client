@@ -33,7 +33,28 @@ type QueryOptions struct {
 	Order  string
 }
 
-func (a *APIResponse) Process() error {
+func New(cfg Config) *Client {
+	c := &Client{
+		Conf: cfg,
+	}
+
+	if cfg.DisableCache {
+		return c
+	}
+
+	c.Cache = NewCache()
+	return c
+}
+
+func (c *Client) CacheEnabled() bool {
+	return !c.Conf.DisableCache
+}
+
+func MergeHeader(req *http.Request, header http.Header) *http.Request {
+	return mergeHeader(req, header)
+}
+
+func (a *APIResponse) process() error {
 	jsn, err := ioutil.ReadAll(a.Response.Body)
 	if err != nil {
 		return err
@@ -53,23 +74,6 @@ func (a *APIResponse) Process() error {
 	a.Data = data["data"]
 
 	return nil
-}
-
-func New(cfg Config) *Client {
-	c := &Client{
-		Conf: cfg,
-	}
-
-	if cfg.DisableCache {
-		return c
-	}
-
-	c.Cache = NewCache()
-	return c
-}
-
-func (c *Client) CacheEnabled() bool {
-	return !c.Conf.DisableCache
 }
 
 func setDefaultOpts(opts QueryOptions) QueryOptions {
