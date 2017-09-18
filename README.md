@@ -1,7 +1,5 @@
 # Ponzu HTTP Client - Go
 
-## Work in Progress
-
 ### Usage
 ```go
 package main
@@ -103,8 +101,17 @@ func main() {
     // create Content item of type Blog with data
     data := make(url.Values)
     data.Set("title", "Added via API")
-    data.Set("body", "<p>i'm not sure about this.</p>")
+    data.Set("body", "<p>Here's some HTML for you...</p>")
     data.Set("author", "Steve")
+
+    // or, instead of making url.Values and setting key/values use helper func:
+    blog := &content.Blog{
+        Title: "Added via API client",
+        Body: "<p>Here's some HTML for you...</p>",
+        Author: "Steve",
+    }
+    data, err := client.ToValues(blog)
+
 
     // nil indicates no data params are filepaths, 
     // otherwise would be a []string of key names that are filepaths (docs coming)
