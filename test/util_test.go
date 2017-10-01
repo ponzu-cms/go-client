@@ -35,3 +35,38 @@ func TestToValues(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestParseReferenceURI(t *testing.T) {
+	cases := map[string]client.Target{
+		"/api/content?type=Test&id=1": client.Target{Type: "Test", ID: 1},
+	}
+
+	for in, expected := range cases {
+		got, err := client.ParseReferenceURI(in)
+		if err != nil {
+			fmt.Println(err)
+			t.Fail()
+		}
+
+		if got.ID != expected.ID {
+			fmt.Printf("expected: %v got: %v\n", expected.ID, got.ID)
+			t.Fail()
+		}
+	}
+}
+
+func TestParseReferenceURIErrors(t *testing.T) {
+	cases := map[string]string{
+		"/api/content":                  "improperly formatted reference URI: /api/content",
+		"/api/content?type=Test&noID=1": "reference URI missing 'id' value: /api/content?type=Test&noID=1",
+		"/api/content?noType=Test&id=1": "reference URI missing 'type' value: /api/content?noType=Test&id=1",
+	}
+
+	for in, expected := range cases {
+		_, err := client.ParseReferenceURI(in)
+		if err.Error() != expected {
+			fmt.Printf("got: %v, expected: %s\n", err, expected)
+			t.Fail()
+		}
+	}
+}

@@ -58,21 +58,24 @@ func ParseReferenceURI(uri string) (Target, error) {
 }
 
 func parseReferenceURI(uri string) (Target, error) {
-	if !strings.HasPrefix(uri, "/api/content?") {
+	const prefix = "/api/content?"
+	if !strings.HasPrefix(uri, prefix) {
 		return Target{}, fmt.Errorf("improperly formatted reference URI: %s", uri)
 	}
 
+	uri = strings.TrimPrefix(uri, prefix)
+
 	q, err := url.ParseQuery(uri)
 	if err != nil {
-		return Target{}, fmt.Errorf("failed to parse reference URI: %s, %v", uri, err)
+		return Target{}, fmt.Errorf("failed to parse reference URI: %s, %v", prefix+uri, err)
 	}
 
 	if q.Get("type") == "" {
-		return Target{}, fmt.Errorf("reference URI missing 'type' value: %s", uri)
+		return Target{}, fmt.Errorf("reference URI missing 'type' value: %s", prefix+uri)
 	}
 
 	if q.Get("id") == "" {
-		return Target{}, fmt.Errorf("reference URI missing 'id' value: %s", uri)
+		return Target{}, fmt.Errorf("reference URI missing 'id' value: %s", prefix+uri)
 	}
 
 	// convert query id string to int
