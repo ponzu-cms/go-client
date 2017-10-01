@@ -9,6 +9,7 @@ Fetching content from Ponzu using:
 - [Content](https://godoc.org/github.com/ponzu-cms/go-client#Client.Content): get single content item from Ponzu by Type and ID
 - [Contents](https://godoc.org/github.com/ponzu-cms/go-client#Client.Contents): get multiple content items as per QueryOptions from Ponzu
 - [ContentBySlug](https://godoc.org/github.com/ponzu-cms/go-client#Client.ContentBySlug): get content identified only by its slug from Ponzu
+- [Reference](https://godoc.org/github.com/ponzu-cms/go-client#Client.Reference): get content behind a reference URI
 
 Creating content in Ponzu using:
 - [Create](https://godoc.org/github.com/ponzu-cms/go-client#Client.Create): insert content (if allowed) into Ponzu CMS, handles multipart/form-data
