@@ -1,10 +1,8 @@
-package client_test
+package client
 
 import (
 	"net/http"
 	"testing"
-
-	client "github.com/ponzu-cms/go-client"
 )
 
 func TestMergeHeader(t *testing.T) {
@@ -24,7 +22,7 @@ func TestMergeHeader(t *testing.T) {
 	header := http.Header{}
 	header.Set("X-Test-1", "Value 1")
 
-	req = client.MergeHeader(req, header)
+	req = mergeHeader(req, header)
 
 	for test, exp := range cases {
 		res := req.Header.Get(test)
@@ -35,7 +33,7 @@ func TestMergeHeader(t *testing.T) {
 
 	// Test multipart requests
 
-	req, err = client.MultipartFormRequest("http://localhost:8080", nil, nil)
+	req, err = MultipartFormRequest("http://localhost:8080", nil, nil)
 	if err != nil {
 		t.Errorf("Error creating multipart request: %v", err)
 	}
@@ -45,7 +43,7 @@ func TestMergeHeader(t *testing.T) {
 		"X-Test-1":     "Value 1",
 	}
 
-	req = client.MergeHeader(req, header)
+	req = mergeHeader(req, header)
 
 	for test, exp := range cases {
 		res := req.Header.Get(test)
