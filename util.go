@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
+	"strings"
 )
 
 // ToValues converts a Content type to a url.Values to use with a Ponzu Go client
@@ -39,4 +41,45 @@ func ToValues(p interface{}) (url.Values, error) {
 	}
 
 	return vals, nil
+}
+
+// Target represents required criteria to lookup single content items from the
+// Ponzu Content API
+type Target struct {
+	Type string
+	ID   int
+}
+
+// ParseReferenceURI is a helper method which accepts a reference path / URI from
+// a parent Content type, and retrns a Target containing a content item's Type
+// and ID
+func ParseReferenceURI(uri string) (Target, error) {
+	return parseReferenceURI(uri)
+}
+
+func parseReferenceURI(uri string) (Target, error) {
+	if !strings.HasPrefix(uri, "/api/content?") {
+		return Target{}, fmt.Errorf("improperly formatted reference URI: %s", uri)
+	}
+
+	q, err := url.ParseQuery(uri)
+	if err != nil {
+		return Target{}, fmt.Errorf("failed to parse reference URI: %s, %v", uri, err)
+	}
+
+	if q.Get("type") == "" {
+		return Target{}, fmt.Errorf("reference URI missing 'type' value: %s", uri)
+	}
+
+	if q.Get("id") == "" {
+		return Target{}, fmt.Errorf("reference URI missing 'id' value: %s", uri)
+	}
+
+	// convert query id string to int
+	id, err := strconv.Atoi(q.Get("id"))
+	if err != nil {
+		return Target{}, err
+	}
+
+	return Target{Type: q.Get("type"), ID: id}, nil
 }

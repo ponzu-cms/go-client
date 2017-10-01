@@ -144,6 +144,14 @@ func (c *Client) Contents(contentType string, opts QueryOptions) (*APIResponse, 
 	return resp, nil
 }
 
+// Create makes a POST request containing a multipart/form-data body with the
+// contents of a content item to be created and stored in Ponzu. Note: the fileKeys
+// []string argument should contain the field/key names of the item's uploads.
+//
+// The *APIResponse will indicate whether the request failed or succeeded based
+// on the contents of its Data or JSON fields, or by checking the Status of it's
+// original http.Response. Callers should expect failures to occur when a Content
+// type does not implement the api.Createable interface
 func (c *Client) Create(contentType string, data interface{}, fileKeys []string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/create?type=%s",
@@ -182,6 +190,14 @@ func (c *Client) Create(contentType string, data interface{}, fileKeys []string)
 	return resp, nil
 }
 
+// Update makes a POST request containing a multipart/form-data body with the
+// contents of a content item to be updated and stored in Ponzu. Note: the fileKeys
+// []string argument should contain the field/key names of the item's uploads
+//
+// The *APIResponse will indicate whether the request failed or succeeded based
+// on the contents of its Data or JSON fields, or by checking the Status of it's
+// original http.Response. Callers should expect failures to occur when a Content
+// type does not implement the api.Updateable interface
 func (c *Client) Update(contentType string, id int, data interface{}, fileKeys []string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/update?type=%s&id=%d",
@@ -220,6 +236,13 @@ func (c *Client) Update(contentType string, id int, data interface{}, fileKeys [
 	return resp, nil
 }
 
+// Delete makes a POST request to the proper endpoint and with the required data
+// to remove content from Ponzu
+//
+// The *APIResponse will indicate whether the request failed or succeeded based
+// on the contents of its Data or JSON fields, or by checking the Status of it's
+// original http.Response. Callers should expect failures to occur when a Content
+// type does not implement the api.Deleteable interface
 func (c *Client) Delete(contentType string, id int) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/delete?type=%s&id=%d",
@@ -248,4 +271,13 @@ func (c *Client) Delete(contentType string, id int) (*APIResponse, error) {
 	}
 
 	return resp, nil
+}
+
+func (c *Client) Reference(uri string) (*APIResponse, error) {
+	target, err := ParseReferenceURI(uri)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Content(target.Type, target.ID)
 }
