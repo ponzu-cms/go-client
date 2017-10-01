@@ -1,5 +1,36 @@
 # Ponzu HTTP Client - Go
 
+The Go client can be used from within any Go program to interact with a Ponzu CMS.
+
+Currently, the Go client has built-in support for:
+
+### Content API
+Fetching content from Ponzu using:
+- [Content](https://godoc.org/github.com/ponzu-cms/go-client#Client.Content): get single content item from Ponzu by Type and ID
+- [Contents](https://godoc.org/github.com/ponzu-cms/go-client#Client.Contents): get multiple content items as per QueryOptions from Ponzu
+- [ContentBySlug](https://godoc.org/github.com/ponzu-cms/go-client#Client.ContentBySlug): get content identified only by its slug from Ponzu
+
+Creating content in Ponzu using:
+- [Create](https://godoc.org/github.com/ponzu-cms/go-client#Client.Create): insert content (if allowed) into Ponzu CMS, handles multipart/form-data
+encoding and file uploads
+
+Updating content in Ponzu using:
+- [Update](https://godoc.org/github.com/ponzu-cms/go-client#Client.Update): change content (if allowed) in Ponzu CMS, handles multipart/form-data
+encoding and file uploads
+
+Deleting content in Ponzu using:
+- [Delete](https://godoc.org/github.com/ponzu-cms/go-client#Client.Delete): remove content (if allowed) in Ponzu CMS, handles multipart/form-data
+encoding
+
+### Search API
+If your content types are indexed, the Go client can handle search requests using:
+- [Search](https://godoc.org/github.com/ponzu-cms/go-client#Client.Search): find content items matching a query for a specific content type
+
+### File Metadata API
+All files uploaded to a Ponzu CMS can be inspected if the file slug is known, using:
+- [FileBySlug](https://godoc.org/github.com/ponzu-cms/go-client#Client.FileBySlug): see metadata associated with a file, including file size, content type,
+and upload date
+
 ### Usage
 ```go
 package main
