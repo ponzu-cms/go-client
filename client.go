@@ -50,10 +50,6 @@ func (c *Client) CacheEnabled() bool {
 	return !c.Conf.DisableCache
 }
 
-func MergeHeader(req *http.Request, header http.Header) *http.Request {
-	return mergeHeader(req, header)
-}
-
 func (a *APIResponse) process() error {
 	jsn, err := ioutil.ReadAll(a.Response.Body)
 	if err != nil {
