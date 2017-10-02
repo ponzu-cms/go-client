@@ -1,7 +1,6 @@
 package client
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -152,21 +151,13 @@ func (c *Client) Contents(contentType string, opts QueryOptions) (*APIResponse, 
 // on the contents of its Data or JSON fields, or by checking the Status of it's
 // original http.Response. Callers should expect failures to occur when a Content
 // type does not implement the api.Createable interface
-func (c *Client) Create(contentType string, data interface{}, fileKeys []string) (*APIResponse, error) {
+func (c *Client) Create(contentType string, data url.Values, fileKeys []string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/create?type=%s",
 		c.Conf.Host, contentType,
 	)
 
-	j, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	params := make(url.Values)
-	err = json.Unmarshal(j, &params)
-
-	req, err := multipartForm(endpoint, params, fileKeys)
+	req, err := multipartForm(endpoint, data, fileKeys)
 	if err != nil {
 		return nil, err
 	}
@@ -198,21 +189,13 @@ func (c *Client) Create(contentType string, data interface{}, fileKeys []string)
 // on the contents of its Data or JSON fields, or by checking the Status of it's
 // original http.Response. Callers should expect failures to occur when a Content
 // type does not implement the api.Updateable interface
-func (c *Client) Update(contentType string, id int, data interface{}, fileKeys []string) (*APIResponse, error) {
+func (c *Client) Update(contentType string, id int, data url.Values, fileKeys []string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/update?type=%s&id=%d",
 		c.Conf.Host, contentType, id,
 	)
 
-	j, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	params := make(url.Values)
-	err = json.Unmarshal(j, &params)
-
-	req, err := multipartForm(endpoint, params, fileKeys)
+	req, err := multipartForm(endpoint, data, fileKeys)
 	if err != nil {
 		return nil, err
 	}
@@ -273,6 +256,8 @@ func (c *Client) Delete(contentType string, id int) (*APIResponse, error) {
 	return resp, nil
 }
 
+// Reference is a helper method to fetch a content item that is referenced from
+// a parent content type
 func (c *Client) Reference(uri string) (*APIResponse, error) {
 	target, err := ParseReferenceURI(uri)
 	if err != nil {
