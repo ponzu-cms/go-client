@@ -12,13 +12,15 @@ func TestToValues(t *testing.T) {
 	type ContentExample struct {
 		item.Item
 
-		Name string `json:"name"`
-		ID   int    `json:"id"`
+		Name string   `json:"name"`
+		ID   int      `json:"id"`
+		Tags []string `json:"tags"`
 	}
 
 	ex := &ContentExample{
-		Name: "Test",
+		Name: "Test case name",
 		ID:   1,
+		Tags: []string{"first", "second", "third"},
 	}
 
 	data, err := client.ToValues(ex)
@@ -32,6 +34,16 @@ func TestToValues(t *testing.T) {
 	}
 
 	if data.Get("id") != fmt.Sprintf("%d", ex.ID) {
+		t.Fail()
+	}
+
+	if data.Get("tags.0") != "first" {
+		t.Fail()
+	}
+	if data.Get("tags.1") != "second" {
+		t.Fail()
+	}
+	if data.Get("tags.2") != "third" {
 		t.Fail()
 	}
 }
