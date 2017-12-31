@@ -26,14 +26,10 @@ func ToValues(p interface{}) (url.Values, error) {
 	vals := make(url.Values)
 	for k, v := range kv {
 		switch v.(type) {
-		case []string:
-			s := v.([]string)
-			for i := range s {
-				if i == 0 {
-					vals.Set(k, s[i])
-				}
-
-				vals.Add(k, s[i])
+		case []interface{}:
+			vv := v.([]interface{})
+			for i := range vv {
+				vals.Set(fmt.Sprintf("%s.%d", k, i), fmt.Sprintf("%v", vv[i]))
 			}
 		default:
 			vals.Set(k, fmt.Sprintf("%v", v))
