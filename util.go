@@ -8,31 +8,31 @@ import (
 	"strings"
 )
 
-// ToValues converts a Content type to a url.Values to use with a Ponzu Go client
-func ToValues(p interface{}) (url.Values, error) {
+// ToValues converts a Content type to a *Values to use with a Ponzu Go client.
+func ToValues(p interface{}) (*Values, error) {
 	// encode p to JSON
 	j, err := json.Marshal(p)
 	if err != nil {
 		return nil, err
 	}
 
-	// decode json to url.Values
+	// decode json to Values
 	var kv map[string]interface{}
 	err = json.Unmarshal(j, &kv)
 	if err != nil {
 		return nil, err
 	}
 
-	vals := make(url.Values)
+	vals := NewValues()
 	for k, v := range kv {
 		switch v.(type) {
 		case []interface{}:
 			vv := v.([]interface{})
 			for i := range vv {
-				vals.Set(fmt.Sprintf("%s.%d", k, i), fmt.Sprintf("%v", vv[i]))
+				vals.Add(k, fmt.Sprintf("%v", vv[i]))
 			}
 		default:
-			vals.Set(k, fmt.Sprintf("%v", v))
+			vals.Add(k, fmt.Sprintf("%v", v))
 		}
 	}
 
@@ -40,7 +40,7 @@ func ToValues(p interface{}) (url.Values, error) {
 }
 
 // Target represents required criteria to lookup single content items from the
-// Ponzu Content API
+// Ponzu Content API.
 type Target struct {
 	Type string
 	ID   int
@@ -48,7 +48,7 @@ type Target struct {
 
 // ParseReferenceURI is a helper method which accepts a reference path / URI from
 // a parent Content type, and retrns a Target containing a content item's Type
-// and ID
+// and ID.
 func ParseReferenceURI(uri string) (Target, error) {
 	return parseReferenceURI(uri)
 }

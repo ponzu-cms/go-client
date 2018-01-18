@@ -33,7 +33,7 @@ func TestMergeHeader(t *testing.T) {
 
 	// Test multipart requests
 
-	req, err = MultipartFormRequest("http://localhost:8080", nil, nil)
+	req, err = multipartForm("http://localhost:8080", NewValues(), nil)
 	if err != nil {
 		t.Errorf("Error creating multipart request: %v", err)
 	}

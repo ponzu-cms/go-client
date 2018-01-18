@@ -9,7 +9,7 @@ import (
 
 type Client struct {
 	http.Client
-	Conf  Config
+	Conf  *Config
 	Cache *Cache
 }
 
@@ -33,7 +33,7 @@ type QueryOptions struct {
 	Order  string
 }
 
-func New(cfg Config) *Client {
+func New(cfg *Config) *Client {
 	c := &Client{
 		Conf: cfg,
 	}
@@ -72,7 +72,15 @@ func (a *APIResponse) process() error {
 	return nil
 }
 
-func setDefaultOpts(opts QueryOptions) QueryOptions {
+func setDefaultOpts(opts *QueryOptions) *QueryOptions {
+	if opts == nil {
+		opts = &QueryOptions{
+			Count:  10,
+			Order:  "DESC",
+			Offset: 0,
+		}
+	}
+
 	if opts.Count == 0 {
 		opts.Count = 10
 	}

@@ -47,7 +47,7 @@ import (
 
 func main() {
     // configure the http client
-    cfg := client.Config{
+    cfg := &client.Config{
         Host:         "http://localhost:8080",
         DisableCache: false, // defaults to false, here for documentation
     }
@@ -83,7 +83,7 @@ func main() {
     // Count: 10
     // Offset: 0
     // Order: DESC
-    resp, err = ponzu.Contents("Blog", client.QueryOptions{})
+    resp, err = ponzu.Contents("Blog", nil)
     if err != nil {
         fmt.Println("Blog:multi error:", err)
         return
@@ -133,12 +133,12 @@ func main() {
     //------------------------------------------------------------------
 
     // create Content item of type Blog with data
-    data := make(url.Values)
+    data := client.NewValues()
     data.Set("title", "Added via API")
     data.Set("body", "<p>Here's some HTML for you...</p>")
     data.Set("author", "Steve")
 
-    // or, instead of making url.Values and setting key/values use helper func:
+    // or, instead of making client.Values and setting key/values use helper func:
     blog := &content.Blog{
         Title: "Added via API client",
         Body: "<p>Here's some HTML for you...</p>",
@@ -165,7 +165,7 @@ func main() {
     //------------------------------------------------------------------
 
     // update Content item of type Blog and ID {id} with data
-    data = make(url.Values)
+    data = client.NewValues()
     data.Set("title", "Added then updated via API")
     data.Set("author", "API Steve")
 

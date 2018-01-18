@@ -2,32 +2,29 @@ package client
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-// MultipartFormRequest creates a new multipart/form-data http request with form data
-// (exported for testing, clients typically will not need this)
-func MultipartFormRequest(endpoint string, params url.Values, fileParams []string) (*http.Request, error) {
-	return multipartForm(endpoint, params, fileParams)
-}
-
-func multipartForm(endpoint string, params url.Values, fileParams []string) (*http.Request, error) {
+func multipartForm(endpoint string, params *Values, fileParams []string) (*http.Request, error) {
+	if params == nil {
+		return nil, errors.New("form data params must not be nil")
+	}
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 
-	for name := range params {
+	for name := range params.values {
 		if keyIsFile(name, fileParams) {
-			if len(params[name]) > 1 {
+			if len(params.values[name]) > 1 {
 				// iterate through file paths (has multiple, like FileRepeater),
 				// make name => name.0, name.1, ... name.N
-				files := params[name]
+				files := params.values[name]
 				for i := range files {
 					fieldName := fmt.Sprintf("%s.%d", name, i)
 					err := addFileToWriter(fieldName, files[i], writer)
@@ -36,13 +33,13 @@ func multipartForm(endpoint string, params url.Values, fileParams []string) (*ht
 					}
 				}
 			} else {
-				err := addFileToWriter(name, params.Get(name), writer)
+				err := addFileToWriter(name, params.values.Get(name), writer)
 				if err != nil {
 					return nil, err
 				}
 			}
 		} else {
-			err := writer.WriteField(name, params.Get(name))
+			err := writer.WriteField(name, params.values.Get(name))
 			if err != nil {
 				return nil, err
 			}

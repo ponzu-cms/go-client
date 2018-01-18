@@ -6,6 +6,7 @@ import (
 
 	client "github.com/ponzu-cms/go-client"
 	"github.com/ponzu-cms/ponzu/system/item"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestToValues(t *testing.T) {
@@ -29,23 +30,18 @@ func TestToValues(t *testing.T) {
 		t.Fail()
 	}
 
-	if data.Get("name") != ex.Name {
-		t.Fail()
+	dataTags := data.Get("tags").([]string)
+	for i, tag := range dataTags {
+		if tag != ex.Tags[i] {
+			t.Fatalf("%#v", data)
+		}
 	}
 
-	if data.Get("id") != fmt.Sprintf("%d", ex.ID) {
-		t.Fail()
-	}
-
-	if data.Get("tags.0") != "first" {
-		t.Fail()
-	}
-	if data.Get("tags.1") != "second" {
-		t.Fail()
-	}
-	if data.Get("tags.2") != "third" {
-		t.Fail()
-	}
+	assert.Equal(t, ex.Name, data.Get("name"))
+	assert.Equal(t, fmt.Sprintf("%d", ex.ID), data.Get("id"))
+	assert.Equal(t, ex.Tags[0], data.Get("tags.0"))
+	assert.Equal(t, ex.Tags[1], data.Get("tags.1"))
+	assert.Equal(t, ex.Tags[2], data.Get("tags.2"))
 }
 
 func TestParseReferenceURI(t *testing.T) {

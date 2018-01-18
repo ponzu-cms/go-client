@@ -3,7 +3,6 @@ package client
 import (
 	"fmt"
 	"net/http"
-	"net/url"
 )
 
 // Content makes a GET request to return the Ponzu Content API response for the
@@ -99,7 +98,7 @@ func (c *Client) ContentBySlug(slug string) (*APIResponse, error) {
 // Count <int>
 // Offset <int>
 // Order <string>
-func (c *Client) Contents(contentType string, opts QueryOptions) (*APIResponse, error) {
+func (c *Client) Contents(contentType string, opts *QueryOptions) (*APIResponse, error) {
 	opts = setDefaultOpts(opts)
 
 	endpoint := fmt.Sprintf(
@@ -151,7 +150,7 @@ func (c *Client) Contents(contentType string, opts QueryOptions) (*APIResponse, 
 // on the contents of its Data or JSON fields, or by checking the Status of it's
 // original http.Response. Callers should expect failures to occur when a Content
 // type does not implement the api.Createable interface
-func (c *Client) Create(contentType string, data url.Values, fileKeys []string) (*APIResponse, error) {
+func (c *Client) Create(contentType string, data *Values, fileKeys []string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/create?type=%s",
 		c.Conf.Host, contentType,
@@ -189,7 +188,7 @@ func (c *Client) Create(contentType string, data url.Values, fileKeys []string) 
 // on the contents of its Data or JSON fields, or by checking the Status of it's
 // original http.Response. Callers should expect failures to occur when a Content
 // type does not implement the api.Updateable interface
-func (c *Client) Update(contentType string, id int, data url.Values, fileKeys []string) (*APIResponse, error) {
+func (c *Client) Update(contentType string, id int, data *Values, fileKeys []string) (*APIResponse, error) {
 	endpoint := fmt.Sprintf(
 		"%s/api/content/update?type=%s&id=%d",
 		c.Conf.Host, contentType, id,
