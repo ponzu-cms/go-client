@@ -15,15 +15,15 @@ Fetching content from Ponzu using:
 
 Creating content in Ponzu using:
 - [Create](https://godoc.org/github.com/ponzu-cms/go-client#Client.Create): insert content (if allowed) into Ponzu CMS, handles multipart/form-data
-encoding and file uploads
+  encoding and file uploads
 
 Updating content in Ponzu using:
 - [Update](https://godoc.org/github.com/ponzu-cms/go-client#Client.Update): change content (if allowed) in Ponzu CMS, handles multipart/form-data
-encoding and file uploads
+  encoding and file uploads
 
 Deleting content in Ponzu using:
 - [Delete](https://godoc.org/github.com/ponzu-cms/go-client#Client.Delete): remove content (if allowed) in Ponzu CMS, handles multipart/form-data
-encoding
+  encoding
 
 ### Search API
 If your content types are indexed, the Go client can handle search requests using:
@@ -32,7 +32,7 @@ If your content types are indexed, the Go client can handle search requests usin
 ### File Metadata API
 All files uploaded to a Ponzu CMS can be inspected if the file slug is known, using:
 - [FileBySlug](https://godoc.org/github.com/ponzu-cms/go-client#Client.FileBySlug): see metadata associated with a file, including file size, content type,
-and upload date
+  and upload date
 
 ### Usage
 ```go
@@ -41,7 +41,7 @@ package main
 import (
 	"fmt"
 	"net/url"
-
+	"net/http"
 	"github.com/ponzu-cms/go-client"
 )
 
@@ -50,6 +50,7 @@ func main() {
     cfg := &client.Config{
         Host:         "http://localhost:8080",
         DisableCache: false, // defaults to false, here for documentation
+      	Header: make(http.Header),
     }
 
     // add custom header(s) if needed:
@@ -72,7 +73,9 @@ func main() {
 
     fmt.Println(resp.Data[0]["title"])
 	fmt.Println(fieldName)
-
+	for fieldName , _ := range resp.Data[0]  {
+		fmt.Println(fieldName)
+	}
 
 
     //------------------------------------------------------------------
