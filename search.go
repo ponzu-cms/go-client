@@ -7,10 +7,12 @@ import (
 
 // Search makes a GET request to return the Ponzu Search API response for the
 // enpoint: `/api/search?type=<Type>&q=<Query String>`
-func (c *Client) Search(contentType string, q string) (*APIResponse, error) {
+func (c *Client) Search(contentType string, q string, opts *QueryOptions) (*APIResponse, error) {
+	opts = setDefaultOpts(opts)
+
 	endpoint := fmt.Sprintf(
-		"%s/api/search?type=%s&q=%s",
-		c.Conf.Host, contentType, url.QueryEscape(q),
+		"%s/api/search?type=%s&q=%s&count=%d&offest=%d",
+		c.Conf.Host, contentType, url.QueryEscape(q), opts.Count, opts.Offset,
 	)
 
 	if c.CacheEnabled() {
