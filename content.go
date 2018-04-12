@@ -231,7 +231,7 @@ func (c *Client) Delete(contentType string, id int) (*APIResponse, error) {
 		c.Conf.Host, contentType, id,
 	)
 
-	req, err := multipartForm(endpoint, nil, nil)
+	req, err := multipartForm(endpoint, NewValues(), nil)
 	if err != nil {
 		return nil, err
 	}
