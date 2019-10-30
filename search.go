@@ -11,7 +11,7 @@ func (c *Client) Search(contentType string, q string, opts *QueryOptions) (*APIR
 	opts = setDefaultOpts(opts)
 
 	endpoint := fmt.Sprintf(
-		"%s/api/search?type=%s&q=%s&count=%d&offest=%d",
+		"%s/api/search?type=%s&q=%s&count=%d&offset=%d",
 		c.Conf.Host, contentType, url.QueryEscape(q), opts.Count, opts.Offset,
 	)
 
